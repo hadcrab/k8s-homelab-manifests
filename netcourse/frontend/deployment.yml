@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: netcourse-frontend
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: netcourse-frontend

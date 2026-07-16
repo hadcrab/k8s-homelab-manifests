@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: netcourse
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/hadcrab/k8s-homelab-manifests.git
+    targetRevision: HEAD
+    path: netcourse
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: netcourse
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

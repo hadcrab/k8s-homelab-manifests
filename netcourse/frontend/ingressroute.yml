@@ -1,0 +1,15 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: netcourse-frontend
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - kind: Rule
+    match: Host(`netcourse.kube`)
+    services:
+    - name: netcourse-frontend
+      port: 3000
+  tls:
+    secretName: netcourse-frontend-tls

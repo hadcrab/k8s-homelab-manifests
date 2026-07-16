@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: netcourse-postgres
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netcourse-postgres
+  serviceName: netcourse-postgres
+  template:
+    metadata:
+      labels:
+        app: netcourse-postgres
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_USER
+          value: netcourse
+        - name: POSTGRES_DB
+          value: netcourse
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: netcourse-postgres-secret
+        image: postgres:18-alpine
+        imagePullPolicy: IfNotPresent
+        name: netcourse-postgres
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/lib/postgresql
+          name: data
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: longhorn
+      volumeMode: Filesystem

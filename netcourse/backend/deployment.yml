@@ -22,7 +22,7 @@ spec:
         - name: DB_HOST
           value: netcourse-postgres
         - name: DB_PORT
-          value: 5432
+          value: "5432"
         - name: DB_USERNAME
           value: netcourse
         - name: DB_NAME

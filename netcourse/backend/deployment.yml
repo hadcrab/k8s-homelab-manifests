@@ -42,6 +42,16 @@ spec:
             secretKeyRef:
               key: password
               name: netcourse-postgres-secret
+        - name: R2_ENDPOINT
+          value: http://minio:9000
+        - name: R2_ACCESS_KEY_ID
+          value: minioadmin
+        - name: R2_SECRET_ACCESS_KEY
+          value: minioadmin
+        - name: R2_BUCKET_NAME
+          value: netcourse
+        - name: R2_PUBLIC_DOMAIN
+          value: "minio:9000"
         image: ghcr.io/hadcrab/netcourse-backend:latest
         imagePullPolicy: Always
         name: netcourse-backend

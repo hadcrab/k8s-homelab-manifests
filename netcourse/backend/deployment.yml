@@ -32,6 +32,11 @@ spec:
             secretKeyRef:
               key: JWT_SECRET
               name: netcourse-backend-secret
+        - name: PASSWORD_PEPPER
+          valueFrom:
+            secretKeyRef:
+              key: PASSWORD_PEPPER
+              name: netcourse-backend-secret
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:

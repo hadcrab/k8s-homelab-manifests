@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netcourse-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: netcourse-backend
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: netcourse-backend
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          value: netcourse-postgres
+        - name: DB_PORT
+          value: 5432
+        - name: DB_USERNAME
+          value: netcourse
+        - name: DB_NAME
+          value: netcourse
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: netcourse-postgres-secret
+        image: ghcr.io/hadcrab/netcourse-backend:latest
+        imagePullPolicy: Always
+        name: netcourse-backend
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      imagePullSecrets:
+      - name: ghcr-pull

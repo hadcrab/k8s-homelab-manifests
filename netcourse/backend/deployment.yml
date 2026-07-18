@@ -27,6 +27,11 @@ spec:
           value: netcourse
         - name: DB_NAME
           value: netcourse
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: jwt_token
+              name: netcourse-backend-secret
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:

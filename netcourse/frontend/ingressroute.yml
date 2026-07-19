@@ -7,6 +7,11 @@ spec:
   - websecure
   routes:
   - kind: Rule
+    match: Host(`netcourse.kube`) && PathPrefix(`/api`)
+    services:
+      - name: netcourse-backend
+        port: 8080
+  - kind: Rule
     match: Host(`netcourse.kube`)
     services:
     - name: netcourse-frontend

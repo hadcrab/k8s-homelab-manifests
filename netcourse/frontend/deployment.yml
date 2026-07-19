@@ -20,7 +20,7 @@ spec:
       containers:
       - env:
         - name: NUXT_PUBLIC_API_BASE
-          value: http://netcourse-backend:8080
+          value: /api
         image: ghcr.io/hadcrab/netcourse-frontend:latest
         imagePullPolicy: Always
         name: netcourse-frontend

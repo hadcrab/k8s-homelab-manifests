@@ -10,6 +10,7 @@ spec:
       chart: cert-manager
       targetRevision: 1.21.0
       helm:
+        releaseName: certmgr
         values: |
           crds:
             enabled: true

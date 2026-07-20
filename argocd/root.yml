@@ -9,6 +9,8 @@ spec:
     repoURL: https://github.com/hadcrab/k8s-homelab-manifests.git
     targetRevision: HEAD
     path: argocd
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

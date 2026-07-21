@@ -10,6 +10,7 @@ spec:
       chart: kube-prometheus-stack
       targetRevision: 87.18.0
       helm:
+        skipCrds: true
         values: |
           alertmanager:
             enabled: false

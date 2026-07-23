@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-tls
+  namespace: argocd
+spec:
+  secretName: argo-ui-tls
+  commonName: "argocd.kube"
+  dnsNames:
+    - argocd.kube
+  issuerRef:
+    name: local-ca-issuer
+    kind: ClusterIssuer

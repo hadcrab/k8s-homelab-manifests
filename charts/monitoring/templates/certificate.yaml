@@ -2,12 +2,12 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: monitoring-grafana
-  namespace: monitoring
+  namespace: {{ .Release.Namespace }}
 spec:
   secretName: monitoring-grafana-tls
-  commonName: "grafana.kube"
+  commonName: "grafana.{{ .Values.domainSuffix }}"
   dnsNames:
-    - grafana.kube
+    - "grafana.{{ .Values.domainSuffix }}"
   issuerRef:
     name: local-ca-issuer
     kind: ClusterIssuer

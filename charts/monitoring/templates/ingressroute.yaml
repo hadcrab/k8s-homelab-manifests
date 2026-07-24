@@ -2,12 +2,12 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: grafana
-  namespace: monitoring
+  namespace: {{ .Release.Namespace }}
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`grafana.kube`)
+    - match: Host(`grafana.{{ .Values.domainSuffix }}`)
       kind: Rule
       services:
         - name: monitoring-grafana

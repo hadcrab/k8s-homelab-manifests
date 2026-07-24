@@ -1,6 +1,6 @@
 # Kubernetes Manifests (GitOps)
 
-Pure YAML manifests for ArgoCD. All application-level components and workloads are defined here, not in the Ansible playbook.
+All platform components and workloads for the homelab cluster. Managed by ArgoCD.
 
 ## How It Works
 
@@ -10,17 +10,25 @@ The root Application is bootstrapped by the Ansible playbook on first run. After
 
 ## Platform Components
 
-MetalLB - metallb-system namespace, L2 mode, IP pool 192.168.122.200-192.168.122.220.
+Each platform component is a Helm chart in `charts/<name>/` with:
 
-cert-manager - cert-manager namespace, self-signed local CA chain.
+- `Chart.yaml` - dependency on the upstream Helm chart
+- `values.yaml` - default configuration (domainSuffix, resource limits, etc.)
+- `templates/` - custom resources (certificates, ingressroutes, issuers)
 
-Traefik - traefik-system namespace, ingress controller.
+ApplicationSet (`argocd/platform-set.yml`) uses a merge generator:
+- git generator discovers directories under `charts/*` automatically
+- list generator provides `namespace` and `skipCrds` for each component
+- merge combines them by `name` key
 
-Longhorn - longhorn namespace, 2 replicas, 5% storage reservation.
+Components:
 
-kube-prometheus-stack - monitoring namespace, Prometheus 2d retention, Grafana, no alertmanager.
-
-Prometheus Operator CRDs - monitoring namespace, separate Application to avoid ArgoCD annotation overflow.
+- MetalLB - metallb-system namespace, L2 mode, IP pool 192.168.122.200-192.168.122.220
+- cert-manager - cert-manager namespace, self-signed local CA chain
+- Traefik - traefik-system namespace, ingress controller
+- Longhorn - longhorn namespace, 2 replicas, 5% storage reservation
+- kube-prometheus-stack - monitoring namespace, Prometheus 2d retention, Grafana, no alertmanager
+- Prometheus Operator CRDs - monitoring namespace, separate chart to avoid ArgoCD annotation overflow
 
 ## TLS
 
@@ -32,13 +40,25 @@ cert-manager is configured with a self-signed local CA chain:
 
 All TLS certificates (Grafana, Longhorn, ArgoCD) are issued by `local-ca-issuer`.
 
+Domain names use `domainSuffix` from chart `values.yaml` (default: `kube`).
+
 ## Adding a New Platform Component
 
-1. Create `platform/<name>/` directory with raw Kubernetes resources
-2. Create `argocd/platform/<name>.yml` with an Application resource pointing to the directory
-3. If the component has a Helm chart, use a multi-source Application with the chart as one source and your custom manifests as the other
+1. Create `charts/<name>/Chart.yaml` with dependency on the upstream chart
+2. Create `charts/<name>/values.yaml` with default values
+3. If TLS is needed, add `templates/certificate.yml` and `templates/ingressroute.yml`
+4. Add entry to list generator in `argocd/platform-set.yml`:
+
+```yaml
+- name: <name>
+  namespace: <namespace>
+  skipCrds: "false"
+```
+
+5. Push. ArgoCD picks it up automatically.
 
 ## Adding a New Workload
 
 1. Create `<workload>/` directory with Deployments, Services, IngressRoutes, etc.
 2. Create `argocd/<workload>.yml` with an Application resource pointing to the directory
+3. Push

@@ -2,13 +2,13 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: longhorn-ui
-  namespace: longhorn
+  namespace: {{ .Release.Namespace }}
 spec:
   entryPoints:
     - web
     - websecure
   routes:
-    - match: Host(`longhorn.kube`)
+    - match: Host(`longhorn.{{ .Values.domainSuffix }}`)
       kind: Rule
       services:
         - name: longhorn-frontend

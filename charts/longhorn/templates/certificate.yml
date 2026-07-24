@@ -2,12 +2,12 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: longhorn-ui
-  namespace: longhorn
+  namespace: {{ .Release.Namespace }}
 spec:
   secretName: longhorn-ui-tls
-  commonName: "longhorn.kube"
+  commonName: "longhorn.{{ .Values.domainSuffix }}"
   dnsNames:
-    - longhorn.kube
+    - "longhorn.{{ .Values.domainSuffix }}"
   issuerRef:
     name: local-ca-issuer
     kind: ClusterIssuer

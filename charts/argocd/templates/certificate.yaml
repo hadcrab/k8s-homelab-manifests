@@ -2,12 +2,12 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: argocd-tls
-  namespace: argocd
+  namespace: {{ .Release.Namespace }}
 spec:
   secretName: argo-ui-tls
-  commonName: "argocd.kube"
+  commonName: "argocd.{{ .Values.domainSuffix }}"
   dnsNames:
-    - argocd.kube
+    - "argocd.{{ .Values.domainSuffix }}"
   issuerRef:
     name: local-ca-issuer
     kind: ClusterIssuer

@@ -2,13 +2,13 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: argocd-server
-  namespace: argocd
+  namespace: {{ .Release.Namespace }}
 spec:
   entryPoints:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`argocd.kube`)
+      match: Host(`argocd.{{ .Values.domainSuffix }}`)
       priority: 10
       services:
         - name: argocd-server

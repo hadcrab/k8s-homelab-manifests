@@ -1,0 +1,9 @@
+domainSuffix: "kube"
+
+persistence:
+  defaultClassReplicaCount: 2
+defaultSettings:
+  defaultReplicaCount: 2
+  replicaAutoBalance: least-effort
+  storageMinimalAvailablePercentage: 5
+  storageReservedPercentageForDefaultDisk: 5

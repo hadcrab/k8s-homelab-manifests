@@ -18,25 +18,18 @@ spec:
               elements:
                 - name: metallb
                   namespace: metallb-system
-                  skipCrds: "false"
                 - name: traefik
                   namespace: traefik-system
-                  skipCrds: "false"
                 - name: certmgr
                   namespace: cert-manager
-                  skipCrds: "false"
                 - name: longhorn
                   namespace: longhorn
-                  skipCrds: "false"
                 - name: monitoring-crds
                   namespace: monitoring
-                  skipCrds: "false"
                 - name: monitoring
                   namespace: monitoring
-                  skipCrds: "true"
                 - name: argocd
                   namespace: argocd
-                  skipCrds: "false"
   template:
     metadata:
       name: '{{name}}'
@@ -46,8 +39,6 @@ spec:
         repoURL: https://github.com/hadcrab/k8s-homelab-manifests.git
         targetRevision: HEAD
         path: 'charts/{{name}}'
-        helm:
-          skipCrds: '{{skipCrds}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{namespace}}'
@@ -57,3 +48,4 @@ spec:
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
+          - ServerSideApply=true

@@ -7,7 +7,7 @@ spec:
   generators:
     - merge:
         mergeKeys:
-          - name
+          - path.basename
         generators:
           - git:
               repoURL: https://github.com/hadcrab/k8s-homelab-manifests.git
@@ -16,29 +16,29 @@ spec:
                 - path: charts/*
           - list:
               elements:
-                - name: metallb
+                - path.basename: metallb
                   namespace: metallb-system
-                - name: traefik
+                - path.basename: traefik
                   namespace: traefik-system
-                - name: certmgr
+                - path.basename: certmgr
                   namespace: cert-manager
-                - name: longhorn
+                - path.basename: longhorn
                   namespace: longhorn
-                - name: monitoring-crds
+                - path.basename: monitoring-crds
                   namespace: monitoring
-                - name: monitoring
+                - path.basename: monitoring
                   namespace: monitoring
-                - name: argocd
+                - path.basename: argocd
                   namespace: argocd
   template:
     metadata:
-      name: '{{name}}'
+      name: '{{path.basename}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/hadcrab/k8s-homelab-manifests.git
         targetRevision: HEAD
-        path: 'charts/{{name}}'
+        path: '{{path}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{namespace}}'

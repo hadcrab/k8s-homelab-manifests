@@ -10,6 +10,8 @@ grafana:
     requests:
       memory: 256Mi
   adminPassword: admin
+  env:
+    GF_SECURITY_ADMIN_PASSWORD: admin
   additionalDataSources:
     - name: loki
       type: loki

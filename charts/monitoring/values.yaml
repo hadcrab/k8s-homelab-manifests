@@ -10,6 +10,12 @@ grafana:
     requests:
       memory: 128Mi
   adminPassword: admin
+  additionalDataSources:
+    - name: loki
+      type: loki
+      url: http://loki.monitoring.svc:3100
+      isDefault: false
+      access: proxy
 
 kubeStateMetrics:
   resources:

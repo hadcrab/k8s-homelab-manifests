@@ -1,0 +1,43 @@
+controller:
+  type: DaemonSet
+
+alloy:
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      memory: 64Mi
+  configMap:
+    create: true
+    content: |
+      discovery.kubernetes "pods" {
+        role = "pod"
+      }
+
+      loki.source.kubernetes "pods" {
+        targets    = discovery.kubernetes.pods.targets
+        forward_to = [loki.write.default.receiver]
+      }
+
+      loki.write "default" {
+        endpoint {
+          url = "http://loki.monitoring.svc:3100/loki/api/v1/push"
+        }
+      }
+
+rbac:
+  create: true
+  rules:
+    - apiGroups: [""]
+      resources: ["pods", "nodes", "nodes/proxy", "services", "endpoints"]
+      verbs: ["get", "list", "watch"]
+
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+
+service:
+  enabled: false
+
+configReloader:
+  enabled: true

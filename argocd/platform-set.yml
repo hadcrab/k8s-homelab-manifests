@@ -28,6 +28,10 @@ spec:
                   namespace: monitoring
                 - path.basename: monitoring
                   namespace: monitoring
+                - path.basename: alloy
+                  namespace: monitoring
+                - path.basename: loki
+                  namespace: monitoring
                 - path.basename: argocd
                   namespace: argocd
   template:

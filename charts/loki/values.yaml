@@ -3,6 +3,8 @@ loki:
 
   singleBinary:
     replicas: 1
+    persistence:
+      size: 1Gi
 
   auth:
     enabled: false
@@ -24,9 +26,6 @@ loki:
       memory: 512Mi
     requests:
       memory: 256Mi
-
-  persistence:
-    size: 1Gi
 
   monitoring:
     dashboards:

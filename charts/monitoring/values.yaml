@@ -1,47 +1,48 @@
-domainSuffix: "kube"
+kube-prometheus-stack:
+  alertmanager:
+    enabled: false
 
-alertmanager:
-  enabled: false
-
-grafana:
-  resources:
-    limits:
-      memory: 512Mi
-    requests:
-      memory: 256Mi
-  adminPassword: admin
-  env:
-    GF_SECURITY_ADMIN_PASSWORD: admin
-  additionalDataSources:
-    - name: loki
-      type: loki
-      url: http://loki.monitoring.svc:3100
-      isDefault: false
-      access: proxy
-
-kubeStateMetrics:
-  resources:
-    limits:
-      memory: 256Mi
-    requests:
-      memory: 128Mi
-
-prometheus:
-  prometheusSpec:
-    scrapeInterval: 60s
-    evaluationInterval: 60s
-    retention: 2d
+  grafana:
     resources:
       limits:
         memory: 512Mi
       requests:
         memory: 256Mi
-  ingress:
-    enabled: false
+    adminPassword: admin
+    env:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    additionalDataSources:
+      - name: loki
+        type: loki
+        url: http://loki.monitoring.svc:3100
+        isDefault: false
+        access: proxy
 
-nodeExporter:
-  resources:
-    limits:
-      memory: 64Mi
-    requests:
-      memory: 32Mi
+  kubeStateMetrics:
+    resources:
+      limits:
+        memory: 256Mi
+      requests:
+        memory: 128Mi
+
+  prometheus:
+    prometheusSpec:
+      scrapeInterval: 60s
+      evaluationInterval: 60s
+      retention: 2d
+      resources:
+        limits:
+          memory: 512Mi
+        requests:
+          memory: 256Mi
+    ingress:
+      enabled: false
+
+  nodeExporter:
+    resources:
+      limits:
+        memory: 64Mi
+      requests:
+        memory: 32Mi
+
+domainSuffix: "kube"
